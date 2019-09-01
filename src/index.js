@@ -1,12 +1,63 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+import Header from './header.jsx';
+import Footer from './footer.jsx';
+import UserDetails from './userDetails.jsx';
+import UserList from './userList.jsx';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+//const element = <h1>Hello World</h1>
+const rootElement = document.getElementById('root');
+//const contentText = <h1>Hello World</h1>
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+//const element = <div className = 'main'> {contentText} </div>;
+
+const data = [
+    {fName: 'Hola', lName: 'Kola'},
+    {fName: 'Suso', lName: 'Vila'},
+    {fName: 'Jordan', lName: 'Sancho'},
+    {fName: 'Vimal', lName: 'Pan'}, ]
+
+class App extends React.Component {
+
+    constructor(props){
+        super(props);
+        this.state = {
+            userData : data,
+            selectedIndex : -1,
+        };
+    }
+
+    updateIndex(index) {
+        this.setState({
+            selectedIndex : index
+        })
+    }
+
+    updateUserList(fName, lName, index){
+        let updatedUserData = this.state.userData;
+        updatedUserData[index] = {"fName": fName, "lName": lName}
+        this.setState(
+            {
+            userData : updatedUserData,
+            selectedIndex: -1
+            }
+        )
+    }
+
+    render() {
+        return <div className='main'>
+            <Header />
+            <UserList users={this.state.userData} 
+                        click={this.updateIndex.bind(this) }/>
+            <UserDetails users={this.state.userData} 
+                        selectedIndex={this.state.selectedIndex} 
+                        update={this.updateUserList.bind(this) }/>
+            <Footer />
+        </div>;
+    }
+}
+
+ReactDOM.render(
+    <App />,
+    rootElement
+);
